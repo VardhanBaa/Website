@@ -58,22 +58,21 @@
 </head>
 <body>
   <div class="container" id="loginBox">
-    <h2>Enter Password</h2>
+    <h2>Password Enter Chey Baa</h2>
     <input type="password" id="password" placeholder="Enter password" />
     <br>
-    <button onclick="checkPassword()">Login</button>
+    <button onclick="checkPassword()">Dhenki Waiting Elu Enjoy Chey!</button>
   </div>
 
   <div class="container" id="mainBox" style="display: none;">
-    <h2>Welcome!</h2>
-    <button onclick="document.getElementById('uploadInput').click()">Upload Image</button>
+    <h2>Hi Baaa Enjoy!</h2>
+    <button onclick="document.getElementById('uploadInput').click()">Image Upload Chey Baa</button>
     <input type="file" id="uploadInput" accept="image/*" style="display: none;" onchange="uploadImage()" />
-    <button onclick="viewImages()">See Uploaded Images</button>
+    <button onclick="viewImages()">Uploaded Images Chudu Baa</button>
     <div id="imageList"></div>
   </div>
-
   <script>
-    const correctPassword = "bro123"; // change your password here
+    const correctPassword = "7/12"; // change your password here
     let uploadedImages = [];
 
     function checkPassword() {
@@ -82,7 +81,7 @@
         document.getElementById("loginBox").style.display = "none";
         document.getElementById("mainBox").style.display = "block";
       } else {
-        alert("Wrong password bro 😅");
+        alert("Wrong password Baa 😅");
       }
     }
 
@@ -93,7 +92,7 @@
         const reader = new FileReader();
         reader.onload = function(e) {
           uploadedImages.push(e.target.result);
-          alert("Image uploaded bro 🚀");
+          alert("Image uploaded ayindhi Baa 🚀");
         };
         reader.readAsDataURL(file);
       }
