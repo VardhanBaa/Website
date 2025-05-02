@@ -1,8 +1,7 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Secure Image Portal</title>
+  <title>Secure Image Baa</title>
   <style>
     * {
       margin: 0;
@@ -59,7 +58,7 @@
 <body>
   <div class="container" id="loginBox">
     <h2>Password Enter Chey Baa</h2>
-    <input type="password" id="password" placeholder="Enter password" />
+    <input type="password" id="password" placeholder="Password Enter Chey Baa" />
     <br>
     <button onclick="checkPassword()">Dhenki Waiting Elu Enjoy Chey!</button>
   </div>
