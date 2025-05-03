@@ -65,7 +65,7 @@
   <script>
     const correctPassword = "7/12";
     const imgbbApiKey = "26580a7906145ed4f4f8acbb9387fa0c"; // ✅ your real API key
-    const jsonURL = "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/images.json"; // 🔁 replace with your real raw JSON URL
+    const jsonURL = "https://raw.githubusercontent.com/VardhanBaa/Website/refs/heads/main/images.json"; // 🔁 replace with your real raw JSON URL
 
     function checkPassword() {
       const userPass = document.getElementById("password").value;
