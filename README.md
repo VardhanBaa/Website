@@ -14,6 +14,7 @@
       justify-content: center;
       align-items: center;
       color: white;
+      overflow: auto;
     }
     @keyframes gradient {
       0% { background-position: 0% 50%; }
@@ -26,7 +27,7 @@
       border-radius: 20px;
       text-align: center;
       width: 90%;
-      max-width: 400px;
+      max-width: 600px;
     }
     button, input[type="file"] {
       margin: 10px;
@@ -39,10 +40,29 @@
     button:hover {
       background-color: #ffffff22;
     }
-    #imageList img {
-      width: 100px;
-      margin: 5px;
-      border-radius: 8px;
+    #imageList {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 1rem;
+    }
+    .image-frame {
+      background: white;
+      padding: 8px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .image-frame:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+    }
+    .image-frame img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
     }
     input[type="text"] {
       width: 100%;
@@ -50,12 +70,6 @@
       border-radius: 8px;
       border: none;
       margin-bottom: 10px;
-    }
-    #dropArea {
-      border: 2px dashed white;
-      padding: 20px;
-      border-radius: 12px;
-      margin-top: 10px;
     }
   </style>
 </head>
@@ -71,15 +85,14 @@
     <h2>Hi Baaa Enjoy!</h2>
     <button onclick="document.getElementById('uploadInput').click()">Image Upload Chey Baa</button>
     <input type="file" id="uploadInput" accept="image/*" style="display: none;" onchange="uploadImage()" />
-    <div id="dropArea">Drag & Drop Images Here</div>
     <button onclick="viewImages()">Uploaded Images Chudu Baa</button>
     <div id="imageList"></div>
   </div>
 
   <script>
     const correctPassword = "7/12";
-    const imgbbApiKey = "26580a7906145ed4f4f8acbb9387fa0c";
-    const jsonURL = "https://raw.githubusercontent.com/VardhanBaa/Website/main/images.json";
+    const imgbbApiKey = "26580a7906145ed4f4f8acbb9387fa0c"; // ✅ Your API Key
+    const jsonURL = "https://raw.githubusercontent.com/VardhanBaa/Website/main/images.json"; // ✅ Replace with your raw JSON URL if different
 
     function checkPassword() {
       const userPass = document.getElementById("password").value;
@@ -91,7 +104,10 @@
       }
     }
 
-    function uploadFile(file) {
+    function uploadImage() {
+      const file = document.getElementById("uploadInput").files[0];
+      if (!file) return alert("Select an image Baa");
+
       const reader = new FileReader();
       reader.onload = async function (e) {
         const base64Image = e.target.result.split(",")[1];
@@ -108,6 +124,7 @@
         const result = await res.json();
         const imageUrl = result.data.url;
 
+        // Show URL + copy button
         const imageList = document.getElementById("imageList");
         imageList.innerHTML = `
           <p>✅ Image uploaded successfully!</p>
@@ -116,13 +133,8 @@
           <p>🛠️ Now go to <code>images.json</code> on GitHub and paste this link inside the array.</p>
         `;
       };
-      reader.readAsDataURL(file);
-    }
 
-    function uploadImage() {
-      const file = document.getElementById("uploadInput").files[0];
-      if (!file) return alert("Select an image Baa");
-      uploadFile(file);
+      reader.readAsDataURL(file);
     }
 
     function copyToClipboard() {
@@ -141,42 +153,20 @@
         .then(images => {
           imageList.innerHTML = "";
           images.forEach(url => {
+            const frame = document.createElement("div");
+            frame.className = "image-frame";
+
             const img = document.createElement("img");
             img.src = url;
 
-            img.addEventListener("contextmenu", e => {
-              e.preventDefault();
-              if (confirm("🗑️ Delete this image from view?")) {
-                img.remove();
-              }
-            });
-
-            imageList.appendChild(img);
+            frame.appendChild(img);
+            imageList.appendChild(frame);
           });
         })
         .catch(() => {
           imageList.innerHTML = "Images Load avatledhu 😢";
         });
     }
-
-    const dropArea = document.getElementById("dropArea");
-    dropArea.addEventListener("dragover", e => {
-      e.preventDefault();
-      dropArea.style.background = "#ffffff22";
-    });
-    dropArea.addEventListener("dragleave", () => {
-      dropArea.style.background = "transparent";
-    });
-    dropArea.addEventListener("drop", e => {
-      e.preventDefault();
-      dropArea.style.background = "transparent";
-      const file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith("image/")) {
-        uploadFile(file);
-      } else {
-        alert("Drag an image file only Baa!");
-      }
-    });
   </script>
 </body>
 </html>
