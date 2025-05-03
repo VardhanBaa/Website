@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -65,8 +64,8 @@
 
   <script>
     const correctPassword = "7/12";
-    const imgbbApiKey = "YOUR_IMGBB_API_KEY"; // Replace this
-    const jsonURL = "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/images.json"; // Replace this
+    const imgbbApiKey = "26580a7906145ed4f4f8acbb9387fa0c"; // ✅ your real API key
+    const jsonURL = "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/images.json"; // 🔁 replace with your real raw JSON URL
 
     function checkPassword() {
       const userPass = document.getElementById("password").value;
@@ -80,7 +79,7 @@
 
     function uploadImage() {
       const file = document.getElementById("uploadInput").files[0];
-      if (!file) return alert("Select an image Baa 😅");
+      if (!file) return alert("Select an image Baa");
 
       const reader = new FileReader();
       reader.onload = async function (e) {
@@ -90,15 +89,15 @@
         formData.append("key", imgbbApiKey);
         formData.append("image", base64Image);
 
-        const response = await fetch("https://api.imgbb.com/1/upload", {
+        const res = await fetch("https://api.imgbb.com/1/upload", {
           method: "POST",
           body: formData
         });
 
-        const result = await response.json();
+        const result = await res.json();
         const imageUrl = result.data.url;
 
-        alert("Image uploaded ayindhi Baa 🚀 Now manually add it to GitHub:\n\n" + imageUrl);
+        alert("✅ Image uploaded!\n\nCopy this URL:\n" + imageUrl + "\n\nThen go to GitHub and add it to your images.json file.");
       };
 
       reader.readAsDataURL(file);
@@ -106,10 +105,10 @@
 
     function viewImages() {
       const imageList = document.getElementById("imageList");
-      imageList.innerHTML = "Loading images Baa...";
+      imageList.innerHTML = "Loading images...";
 
       fetch(jsonURL)
-        .then(response => response.json())
+        .then(res => res.json())
         .then(images => {
           imageList.innerHTML = "";
           images.forEach(url => {
@@ -118,8 +117,8 @@
             imageList.appendChild(img);
           });
         })
-        .catch(err => {
-          imageList.innerHTML = "Error loading images Baa 😢";
+        .catch(() => {
+          imageList.innerHTML = "Error loading images 😢";
         });
     }
   </script>
