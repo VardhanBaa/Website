@@ -41,9 +41,8 @@
       background-color: #ffffff22;
     }
     #imageList {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);  /* 5 images per row */
       gap: 15px;
       margin-top: 1rem;
       max-height: 400px;  /* Set max height */
