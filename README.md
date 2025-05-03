@@ -44,6 +44,13 @@
       margin: 5px;
       border-radius: 8px;
     }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -64,8 +71,8 @@
 
   <script>
     const correctPassword = "7/12";
-    const imgbbApiKey = "26580a7906145ed4f4f8acbb9387fa0c"; // ✅ your real API key
-    const jsonURL = "https://raw.githubusercontent.com/VardhanBaa/Website/refs/heads/main/images.json"; // 🔁 replace with your real raw JSON URL
+    const imgbbApiKey = "26580a7906145ed4f4f8acbb9387fa0c"; // ✅ Your API Key
+    const jsonURL = "https://raw.githubusercontent.com/VardhanBaa/Website/main/images.json"; // ✅ Replace with your raw JSON URL if different
 
     function checkPassword() {
       const userPass = document.getElementById("password").value;
@@ -97,10 +104,24 @@
         const result = await res.json();
         const imageUrl = result.data.url;
 
-        alert("✅ Image uploaded!\n\nCopy this URL:\n" + imageUrl + "\n\nThen go to GitHub and add it to your images.json file.");
+        // Show URL + copy button
+        const imageList = document.getElementById("imageList");
+        imageList.innerHTML = `
+          <p>✅ Image uploaded successfully!</p>
+          <input type="text" value="${imageUrl}" id="uploadedUrl" readonly />
+          <button onclick="copyToClipboard()">Copy Image URL</button>
+          <p>🛠️ Now go to <code>images.json</code> on GitHub and paste this link inside the array.</p>
+        `;
       };
 
       reader.readAsDataURL(file);
+    }
+
+    function copyToClipboard() {
+      const urlInput = document.getElementById("uploadedUrl");
+      urlInput.select();
+      document.execCommand("copy");
+      alert("📋 Copied to clipboard!");
     }
 
     function viewImages() {
