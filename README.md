@@ -43,7 +43,6 @@
       width: 100px;
       margin: 5px;
       border-radius: 8px;
-      cursor: pointer;
     }
     input[type="text"] {
       width: 100%;
@@ -52,15 +51,11 @@
       border: none;
       margin-bottom: 10px;
     }
-    #contextMenu {
-      position: absolute;
-      background: #333;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 8px;
-      display: none;
-      z-index: 1000;
-      cursor: pointer;
+    #dropArea {
+      border: 2px dashed white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -76,17 +71,15 @@
     <h2>Hi Baaa Enjoy!</h2>
     <button onclick="document.getElementById('uploadInput').click()">Image Upload Chey Baa</button>
     <input type="file" id="uploadInput" accept="image/*" style="display: none;" onchange="uploadImage()" />
+    <div id="dropArea">Drag & Drop Images Here</div>
     <button onclick="viewImages()">Uploaded Images Chudu Baa</button>
     <div id="imageList"></div>
   </div>
-
-  <div id="contextMenu" onclick="deleteImage()">🗑️ Delete Image</div>
 
   <script>
     const correctPassword = "7/12";
     const imgbbApiKey = "26580a7906145ed4f4f8acbb9387fa0c";
     const jsonURL = "https://raw.githubusercontent.com/VardhanBaa/Website/main/images.json";
-    let rightClickedImage = null;
 
     function checkPassword() {
       const userPass = document.getElementById("password").value;
@@ -98,10 +91,7 @@
       }
     }
 
-    function uploadImage() {
-      const file = document.getElementById("uploadInput").files[0];
-      if (!file) return alert("Select an image Baa");
-
+    function uploadFile(file) {
       const reader = new FileReader();
       reader.onload = async function (e) {
         const base64Image = e.target.result.split(",")[1];
@@ -126,8 +116,13 @@
           <p>🛠️ Now go to <code>images.json</code> on GitHub and paste this link inside the array.</p>
         `;
       };
-
       reader.readAsDataURL(file);
+    }
+
+    function uploadImage() {
+      const file = document.getElementById("uploadInput").files[0];
+      if (!file) return alert("Select an image Baa");
+      uploadFile(file);
     }
 
     function copyToClipboard() {
@@ -148,7 +143,14 @@
           images.forEach(url => {
             const img = document.createElement("img");
             img.src = url;
-            img.oncontextmenu = e => showContextMenu(e, img);
+
+            img.addEventListener("contextmenu", e => {
+              e.preventDefault();
+              if (confirm("🗑️ Delete this image from view?")) {
+                img.remove();
+              }
+            });
+
             imageList.appendChild(img);
           });
         })
@@ -157,26 +159,24 @@
         });
     }
 
-    function showContextMenu(e, img) {
+    const dropArea = document.getElementById("dropArea");
+    dropArea.addEventListener("dragover", e => {
       e.preventDefault();
-      rightClickedImage = img;
-      const menu = document.getElementById("contextMenu");
-      menu.style.top = `${e.clientY}px`;
-      menu.style.left = `${e.clientX}px`;
-      menu.style.display = "block";
-    }
-
-    function deleteImage() {
-      if (rightClickedImage) {
-        rightClickedImage.remove();
-        rightClickedImage = null;
+      dropArea.style.background = "#ffffff22";
+    });
+    dropArea.addEventListener("dragleave", () => {
+      dropArea.style.background = "transparent";
+    });
+    dropArea.addEventListener("drop", e => {
+      e.preventDefault();
+      dropArea.style.background = "transparent";
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith("image/")) {
+        uploadFile(file);
+      } else {
+        alert("Drag an image file only Baa!");
       }
-      document.getElementById("contextMenu").style.display = "none";
-    }
-
-    window.onclick = () => {
-      document.getElementById("contextMenu").style.display = "none";
-    };
+    });
   </script>
 </body>
 </html>
