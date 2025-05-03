@@ -1,13 +1,10 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Secure Image Baa</title>
+  <title>Secur</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       height: 100vh;
       font-family: 'Segoe UI', sans-serif;
@@ -19,13 +16,11 @@
       align-items: center;
       color: white;
     }
-
     @keyframes gradient {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
     .container {
       background: rgba(0, 0, 0, 0.4);
       padding: 2rem;
@@ -34,7 +29,6 @@
       width: 90%;
       max-width: 400px;
     }
-
     button, input[type="file"] {
       margin: 10px;
       padding: 10px 20px;
@@ -43,11 +37,9 @@
       cursor: pointer;
       font-weight: bold;
     }
-
     button:hover {
       background-color: #ffffff22;
     }
-
     #imageList img {
       width: 100px;
       margin: 5px;
@@ -58,7 +50,7 @@
 <body>
   <div class="container" id="loginBox">
     <h2>Password Enter Chey Baa</h2>
-    <input type="password" id="password" placeholder="Password Enter Chey Baa" />
+    <input type="password" id="password" placeholder="Enter password" />
     <br>
     <button onclick="checkPassword()">Dhenki Waiting Elu Enjoy Chey!</button>
   </div>
@@ -70,9 +62,11 @@
     <button onclick="viewImages()">Uploaded Images Chudu Baa</button>
     <div id="imageList"></div>
   </div>
+
   <script>
-    const correctPassword = "7/12"; // change your password here
-    let uploadedImages = [];
+    const correctPassword = "7/12";
+    const imgbbApiKey = "YOUR_IMGBB_API_KEY"; // Replace this
+    const jsonURL = "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/images.json"; // Replace this
 
     function checkPassword() {
       const userPass = document.getElementById("password").value;
@@ -85,26 +79,48 @@
     }
 
     function uploadImage() {
-      const fileInput = document.getElementById("uploadInput");
-      const file = fileInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          uploadedImages.push(e.target.result);
-          alert("Image uploaded ayindhi Baa 🚀");
-        };
-        reader.readAsDataURL(file);
-      }
+      const file = document.getElementById("uploadInput").files[0];
+      if (!file) return alert("Select an image Baa 😅");
+
+      const reader = new FileReader();
+      reader.onload = async function (e) {
+        const base64Image = e.target.result.split(",")[1];
+
+        const formData = new FormData();
+        formData.append("key", imgbbApiKey);
+        formData.append("image", base64Image);
+
+        const response = await fetch("https://api.imgbb.com/1/upload", {
+          method: "POST",
+          body: formData
+        });
+
+        const result = await response.json();
+        const imageUrl = result.data.url;
+
+        alert("Image uploaded ayindhi Baa 🚀 Now manually add it to GitHub:\n\n" + imageUrl);
+      };
+
+      reader.readAsDataURL(file);
     }
 
     function viewImages() {
       const imageList = document.getElementById("imageList");
-      imageList.innerHTML = "";
-      uploadedImages.forEach(img => {
-        const imageElement = document.createElement("img");
-        imageElement.src = img;
-        imageList.appendChild(imageElement);
-      });
+      imageList.innerHTML = "Loading images Baa...";
+
+      fetch(jsonURL)
+        .then(response => response.json())
+        .then(images => {
+          imageList.innerHTML = "";
+          images.forEach(url => {
+            const img = document.createElement("img");
+            img.src = url;
+            imageList.appendChild(img);
+          });
+        })
+        .catch(err => {
+          imageList.innerHTML = "Error loading images Baa 😢";
+        });
     }
   </script>
 </body>
