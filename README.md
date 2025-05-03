@@ -42,11 +42,11 @@
     }
     #imageList {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);  /* 5 images per row */
+      grid-template-columns: repeat(5, 1fr);
       gap: 15px;
       margin-top: 1rem;
-      max-height: 400px;  /* Set max height */
-      overflow-y: auto;   /* Enable vertical scrolling */
+      max-height: 400px;
+      overflow-y: auto;
     }
     .image-frame {
       background: white;
@@ -114,7 +114,6 @@
     <div id="imageList"></div>
   </div>
 
-  <!-- Modal for Viewing Full Image -->
   <div class="image-modal" id="imageModal">
     <div class="modal-content">
       <img id="fullImage" src="" alt="Full Image" />
@@ -124,8 +123,8 @@
 
   <script>
     const correctPassword = "7/12";
-    const imgbbApiKey = "26580a7906145ed4f4f8acbb9387fa0c"; // ✅ Your API Key
-    const jsonURL = "https://raw.githubusercontent.com/VardhanBaa/Website/main/images.json"; // ✅ Replace with your raw JSON URL if different
+    const imgbbApiKey = "26580a7906145ed4f4f8acbb9387fa0c";
+    const jsonURL = "https://raw.githubusercontent.com/VardhanBaa/Website/main/images.json";
 
     function checkPassword() {
       const userPass = document.getElementById("password").value;
@@ -157,7 +156,6 @@
         const result = await res.json();
         const imageUrl = result.data.url;
 
-        // Show URL + copy button
         const imageList = document.getElementById("imageList");
         imageList.innerHTML = `
           <p>✅ Image uploaded successfully!</p>
@@ -203,14 +201,23 @@
     }
 
     function showOptions(url) {
-      const modal = document.createElement("div");
-      modal.classList.add("modal-options");
-      modal.innerHTML = `
-        <p>Choose an option:</p>
+      const options = document.createElement("div");
+      options.style.position = "fixed";
+      options.style.top = "50%";
+      options.style.left = "50%";
+      options.style.transform = "translate(-50%, -50%)";
+      options.style.background = "#222";
+      options.style.padding = "20px";
+      options.style.borderRadius = "15px";
+      options.style.zIndex = 1000;
+      options.innerHTML = `
+        <p style="margin-bottom: 10px;">Choose an option:</p>
         <button onclick="openFullImage('${url}')">Open Full Image</button>
         <button onclick="requestDelete('${url}')">Request Delete</button>
+        <br><br>
+        <button onclick="this.parentNode.remove()">Cancel</button>
       `;
-      document.body.appendChild(modal);
+      document.body.appendChild(options);
     }
 
     function openFullImage(url) {
@@ -228,4 +235,8 @@
       const subject = "Delete Image Request";
       const body = `Please delete the following image: ${url}`;
       const mailto = `mailto:chatgptshorsbytinesh@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      window.location
+      window.location.href = mailto;
+    }
+  </script>
+</body>
+</html>
