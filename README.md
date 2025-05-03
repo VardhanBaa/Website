@@ -43,6 +43,7 @@
       width: 100px;
       margin: 5px;
       border-radius: 8px;
+      cursor: pointer;
     }
     input[type="text"] {
       width: 100%;
@@ -50,6 +51,16 @@
       border-radius: 8px;
       border: none;
       margin-bottom: 10px;
+    }
+    #contextMenu {
+      position: absolute;
+      background: #333;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: none;
+      z-index: 1000;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -69,10 +80,13 @@
     <div id="imageList"></div>
   </div>
 
+  <div id="contextMenu" onclick="deleteImage()">🗑️ Delete Image</div>
+
   <script>
     const correctPassword = "7/12";
-    const imgbbApiKey = "26580a7906145ed4f4f8acbb9387fa0c"; // ✅ Your API Key
-    const jsonURL = "https://raw.githubusercontent.com/VardhanBaa/Website/main/images.json"; // ✅ Replace with your raw JSON URL if different
+    const imgbbApiKey = "26580a7906145ed4f4f8acbb9387fa0c";
+    const jsonURL = "https://raw.githubusercontent.com/VardhanBaa/Website/main/images.json";
+    let rightClickedImage = null;
 
     function checkPassword() {
       const userPass = document.getElementById("password").value;
@@ -104,7 +118,6 @@
         const result = await res.json();
         const imageUrl = result.data.url;
 
-        // Show URL + copy button
         const imageList = document.getElementById("imageList");
         imageList.innerHTML = `
           <p>✅ Image uploaded successfully!</p>
@@ -135,13 +148,35 @@
           images.forEach(url => {
             const img = document.createElement("img");
             img.src = url;
+            img.oncontextmenu = e => showContextMenu(e, img);
             imageList.appendChild(img);
           });
         })
         .catch(() => {
-          imageList.innerHTML = "Error loading images 😢";
+          imageList.innerHTML = "Images Load avatledhu 😢";
         });
     }
+
+    function showContextMenu(e, img) {
+      e.preventDefault();
+      rightClickedImage = img;
+      const menu = document.getElementById("contextMenu");
+      menu.style.top = `${e.clientY}px`;
+      menu.style.left = `${e.clientX}px`;
+      menu.style.display = "block";
+    }
+
+    function deleteImage() {
+      if (rightClickedImage) {
+        rightClickedImage.remove();
+        rightClickedImage = null;
+      }
+      document.getElementById("contextMenu").style.display = "none";
+    }
+
+    window.onclick = () => {
+      document.getElementById("contextMenu").style.display = "none";
+    };
   </script>
 </body>
 </html>
