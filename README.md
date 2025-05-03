@@ -65,12 +65,36 @@
       object-fit: cover;
       border-radius: 10px;
     }
-    input[type="text"] {
+    .image-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      padding: 8px;
-      border-radius: 8px;
-      border: none;
-      margin-bottom: 10px;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    .image-modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+    .image-modal .modal-content {
+      position: relative;
+    }
+    .image-modal .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      color: white;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 50%;
     }
   </style>
 </head>
@@ -88,6 +112,14 @@
     <input type="file" id="uploadInput" accept="image/*" style="display: none;" onchange="uploadImage()" />
     <button onclick="viewImages()">Uploaded Images Chudu Baa</button>
     <div id="imageList"></div>
+  </div>
+
+  <!-- Modal for Viewing Full Image -->
+  <div class="image-modal" id="imageModal">
+    <div class="modal-content">
+      <img id="fullImage" src="" alt="Full Image" />
+      <button class="close-btn" onclick="closeImage()">Back</button>
+    </div>
   </div>
 
   <script>
@@ -156,6 +188,7 @@
           images.forEach(url => {
             const frame = document.createElement("div");
             frame.className = "image-frame";
+            frame.onclick = () => showOptions(url);
 
             const img = document.createElement("img");
             img.src = url;
@@ -168,6 +201,31 @@
           imageList.innerHTML = "Images Load avatledhu 😢";
         });
     }
-  </script>
-</body>
-</html>
+
+    function showOptions(url) {
+      const modal = document.createElement("div");
+      modal.classList.add("modal-options");
+      modal.innerHTML = `
+        <p>Choose an option:</p>
+        <button onclick="openFullImage('${url}')">Open Full Image</button>
+        <button onclick="requestDelete('${url}')">Request Delete</button>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    function openFullImage(url) {
+      const modal = document.getElementById("imageModal");
+      const fullImage = document.getElementById("fullImage");
+      fullImage.src = url;
+      modal.style.display = "flex";
+    }
+
+    function closeImage() {
+      document.getElementById("imageModal").style.display = "none";
+    }
+
+    function requestDelete(url) {
+      const subject = "Delete Image Request";
+      const body = `Please delete the following image: ${url}`;
+      const mailto = `mailto:chatgptshorsbytinesh@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location
