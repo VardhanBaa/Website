@@ -46,6 +46,8 @@
       justify-content: center;
       gap: 15px;
       margin-top: 1rem;
+      max-height: 400px;  /* Set max height */
+      overflow-y: auto;   /* Enable vertical scrolling */
     }
     .image-frame {
       background: white;
